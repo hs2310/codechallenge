@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var cors = require('cors');
-var {java_compilation_path, java_execution_path } = require('./pathvariable');
+const {java_compilation_path, java_execution_path } = require('./pathvariable');
 const {c, cpp, node, python, java} = require('compile-run');
 var app = express();
 var fs = require('fs');
