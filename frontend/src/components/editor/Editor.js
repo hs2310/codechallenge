@@ -47,14 +47,11 @@ function Editor() {
   const classes = useStyles();
   const [code, setCode] = useState("")
   const [output, setOutput] = useState("");
-  const [mode, setMode] = useState("java");
+  const [mode, setMode] = useState("java,java");
   const [theme, setTheme] = useState("monokai");
-  const [lang, setLang] = useState("java");
+  // const [lang, setLang] = useState("java");
 
-  let handleChange = (e) => {
-    setLang(e.split(',')[0]);
-    setMode(e.split(',')[1]);
-  }
+  
 
   return (
     <div>
@@ -70,9 +67,9 @@ function Editor() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" style={{ marginTop: "9%", width: "100%" }}>
+      <Container maxWidth="lg" style={{ marginTop: "5%", width: "100%" }}>
         <div>
-          <FormControl style={{ width: "20%" }}>
+          <FormControl style={{ width: "20%" , marginLeft : "20%" }}>
             <InputLabel id="select-theme">Theme</InputLabel>
             <Select
               labelId="select-theme"
@@ -86,16 +83,18 @@ function Editor() {
               <MenuItem selected value="monokai">sublime</MenuItem>
               <MenuItem value="eclipse">eclipse</MenuItem>
               <MenuItem value="dreamweaver">dreamweaver</MenuItem>
+
             </Select>
           </FormControl>
 
-          <FormControl style={{ width: "20%", marginLeft: "60%" }}>
+          <FormControl style={{ width: "20%", marginLeft: "20%" }}>
             <InputLabel id="select-lang">Language</InputLabel>
             <Select
               labelId="select-lang"
               id="lang"
               value={mode}
-              onChange={(e) => { handleChange(e.target.value) }}
+              onChange={(e) => { setMode(e.target.value)}}
+  
             >
               <MenuItem selected value="java,java">java</MenuItem>
               <MenuItem value="c,c_cpp">C</MenuItem>
@@ -109,7 +108,7 @@ function Editor() {
 
           <Paper elevation={3} style={{ marginTop: "2%", padding: "2%" }}>
             <AceEditor
-              mode={mode}
+              mode={mode.split(",")[1]}
               theme={theme}
               onChange={(e) => { setCode(e) }}
               placeholder="Write your code here  ; )"
@@ -127,12 +126,12 @@ function Editor() {
               }}
               style={{ width: "100%" }} />
           </Paper>
-          <div style={{ marginTop: "2%" }}>
-            <Button variant="contained" type="button" color="primary" onClick={async () => {
+          <div style={{ marginTop: "2%" , width: "100%"}}>
+            <Button variant="contained" type="button" style={{margin : "0 auto"}} color="primary" onClick={async () => {
               console.log(code);
               let data = {
                 code: code,
-                lang: lang,
+                lang: mode.split(",")[1],
               }
               await axios.post("http://localhost:3001/compile", data)
                 .then(res => setOutput(res.data))
