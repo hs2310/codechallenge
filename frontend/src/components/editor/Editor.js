@@ -122,7 +122,7 @@ function Editor() {
                 enableLiveAutocompletion: true,
                 enableSnippets: true,
                 showLineNumbers: true,
-                tabSize: 2
+                tabSize: 4
               }}
               style={{ width: "100%" }} />
           </Paper>
@@ -131,7 +131,7 @@ function Editor() {
               console.log(code);
               let data = {
                 code: code,
-                lang: mode.split(",")[1],
+                lang: mode.split(",")[0],
               }
               await axios.post("http://localhost:3001/compile", data)
                 .then(res => setOutput(res.data))

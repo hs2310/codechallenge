@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var cors = require('cors');
-const {java_compilation_path, java_execution_path } = require('./pathvariable');
+const {java_compilation_path, java_execution_path , python2_execution_path , python3_execution_path , c_compilation_path , cpp_compilation_path} = require('./pathvariable');
 const {c, cpp, node, python, java} = require('compile-run');
 var app = express();
 var fs = require('fs');
@@ -45,8 +45,80 @@ app.post('/compile' , (req,res) => {
                 });
                 
             }
-          });
-    }
+        });
+    } else if (req.body.lang == "c"){
+        fs.writeFile('Solution.c', req.body.code, function (err) {
+            if (err)  console.log(err);
+            else {
+                console.log("File Created " + c_compilation_path);
+                c.runFile('Solution.c',{ stdin:'3\n2\n'},{
+                    compilationPath: c_compilation_path
+                }).then(
+                    result=>{
+                        console.log(result)
+                        res.send(result)
+                    }
+                ).catch(err =>{ 
+                    console.log(err)
+                    res.send(err)
+                });
+            }
+        });
+    } else if (req.body.lang == "c++"){
+        fs.writeFile('Solution.cpp', req.body.code, function (err) {
+            if (err)  console.log(err);
+            else {
+                console.log("File Created");
+                cpp.runFile('./Solution.cpp',{ stdin:'3\n2\n'},{
+                    compilationPath: cpp_compilation_path
+                }).then(
+                    result=>{
+                        console.log(result)
+                        res.send(result)
+                    }
+                ).catch(err =>{ 
+                    console.log(err)
+                    res.send(err)
+                });
+            }
+        });
+    } else if (req.body.lang == "python2"){
+        fs.writeFile('Solution.py', req.body.code, function (err) {
+            if (err)  console.log(err);
+            else {
+                console.log("File Created");
+                python.runFile('./Solution.py',{ stdin:'3\n2\n'},{
+                    executionPath : python2_execution_path
+                }).then(
+                    result=>{
+                        console.log(result)
+                        res.send(result)
+                    }
+                ).catch(err =>{ 
+                    console.log(err)
+                    res.send(err)
+                });
+            }
+        });
+    } else if (req.body.lang == "python3"){
+        fs.writeFile('Solution.py', req.body.code, function (err) {
+            if (err)  console.log(err);
+            else {
+                console.log("File Created");
+                python.runFile('./Solution.py',{ stdin:'3\n2\n'},{
+                    executionPath : python3_execution_path
+                }).then(
+                    result=>{
+                        console.log(result)
+                        res.send(result)
+                    }
+                ).catch(err =>{ 
+                    console.log(err)
+                    res.send(err)
+                });
+            }
+        });
+    } 
     
 })
 app.listen(3001);
